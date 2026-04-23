@@ -1,0 +1,226 @@
+queries:
+  - id: q1
+    text: >
+      What was NVIDIA's Return on Equity (ROE) for FY2023? Use market financial data
+      for net income and revenue, the most recent 10-K filing for total assets, and
+      market fundamentals for shareholders' equity. Compute ROE using the DuPont
+      three-factor model and report the final percentage figure only.
+      Answer format: "NVIDIA ROE for FY2023: xx.x%"
+    grader: numeric
+    definition_keywords: ["return", "equity", "margin", "turnover", "multiplier"]
+    ground_truth: 20.0
+    tolerance_pct: 15.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_financials, query_filing_documents, get_market_fundamentals, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q2
+    text: >
+      What was Apple's Weighted Average Cost of Capital (WACC) as of end-2024? Retrieve
+      Apple's beta and debt-to-equity ratio from market fundamentals, annual interest
+      expense and total debt from the most recent 10-K, and the current 10-year US
+      Treasury yield as the risk-free rate. Assume a 5.5% equity risk premium and use
+      CAPM for cost of equity. Report the final WACC percentage only.
+      Answer format: "Apple WACC as of end-2024: xx.x%"
+    grader: numeric
+    definition_keywords: ["weighted", "average", "cost", "capital", "discount"]
+    ground_truth: 7.0
+    tolerance_pct: 30.0
+    minimum_tools: 5
+    required_tools: [ finance_kb, get_market_fundamentals, query_filing_documents, web_search, calculator]
+    data_as_of: "2026-04-22"
+
+  - id: q3
+    text: >
+      What were Amazon (AMZN) and Alphabet (GOOGL) operating margins for FY2024?
+      Retrieve income statements from market financial data and verify FY2024 figures
+      against each company's most recent 10-K filing. Report the two margin percentages
+      (AMZN and GOOGL) and state which company had the higher FY2024 operating margin. 
+      Answer format : "AMZN: xx.x%, GOOGL: xx.x%, GOOGL had the higher margin"
+    grader: category_plus_numeric
+    ground_truth_category: "Amazon"
+    ground_truth_values: {"AMZN": 10.8, "GOOGL": 32.0}
+    tolerance_pp: 3.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_financials, query_filing_documents, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q4
+    text: >
+      What was Tesla's free cash flow (FCF) for FY2024 in dollars? Retrieve operating
+      cash flow and capital expenditures from Tesla's most recent 10-K filing. Compute
+      FCF as operating cash flow minus CapEx and report the dollar figure only. 
+      Answer format: "Tesla FCF for FY2024: $x,xxx,xxx,xxx"
+    grader: numeric
+    ground_truth: 3600000000
+    tolerance_pct: 25.0
+    minimum_tools: 5
+    required_tools: [finance_kb, query_filing_documents, get_market_financials, get_market_history, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q5
+    text: >
+      What was Microsoft's revenue CAGR from FY2022 to FY2024? Retrieve FY2022 revenue
+      from its 10-K filing and FY2024 revenue from market financial data. Compute the
+      two-year CAGR and report the percentage figure only. 
+      Answer format: "Microsoft revenue CAGR from FY2022 to FY2024: xx.x%"
+    grader: numeric
+    ground_truth: 11.10
+    tolerance_pp: 2.0
+    minimum_tools: 5
+    required_tools: [finance_kb, query_filing_documents, get_market_financials, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q6
+    text: >
+      What were Meta (META) and Alphabet (GOOGL) EV/EBITDA multiples as of end-2024?
+      Retrieve both multiples from market fundamentals and verify each company's EBITDA
+      against its most recent 10-K filing. Report both multiples and state which company
+      had the lower (cheaper) EV/EBITDA.
+      Answer format: "META: xx.x, GOOGL: xx.x, GOOGL had the lower EV/EBITDA"
+    grader: category_plus_numeric
+    ground_truth_category: "GOOGL"
+    ground_truth_category_aliases: ["Alphabet", "Google", "GOOGL"]
+    ground_truth_values: {"META": 18.70, "GOOGL": 17.20}
+    tolerance_pp: 4.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_fundamentals, query_filing_documents, search_wikipedia, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q7
+    text: >
+      If $10,000 was invested in SPY on 2020-01-02, what would the portfolio value be
+      on 2024-12-31? Retrieve SPY's adjusted closing price on both dates from market
+      price history (the tool returns dividend-adjusted prices) and compute the ending
+      value as ($10,000 / opening adjusted price) × closing adjusted price. Report the
+      dollar figure only.
+      Answer format: "SPY portfolio value on 2024-12-31: $xx,xxx"
+    grader: numeric
+    ground_truth: 19000.0
+    tolerance_pct: 5.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_history, calculator, web_search, search_wikipedia]
+    data_as_of: "2026-04-22"
+
+  - id: q8
+    text: >
+      What was the interest coverage ratio for the higher-debt company between Ford (F)
+      and GM for FY2024? Retrieve both companies' debt-to-equity ratios from market
+      fundamentals, then query the most recent 10-K of the higher-debt company for EBIT
+      and annual interest expense. Compute the interest coverage ratio (EBIT divided by
+      interest expense) and report the figure and which company it belongs to. 
+      Answer format: "Company: xx.x"
+    grader: two_numerics_direction
+    ground_truth: 9.20
+    ground_truth_direction: "Ford"
+    tolerance_pct: 20.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_fundamentals, query_filing_documents, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q9
+    text: >
+      What is Apple's estimated intrinsic value per share using a two-stage DCF model?
+      Retrieve Apple's most recent FCF and shares outstanding from its 10-K filing, and
+      beta from market fundamentals. Estimate WACC using CAPM with the current 10-year
+      Treasury yield and a 5.5% equity risk premium. Apply a two-stage DCF: 5 years at
+      8% FCF growth, terminal growth rate of 3%. Report the per-share dollar value only. 
+      Answer format: "Apple intrinsic value per share: $xxx.xx"
+    grader: numeric
+    definition_keywords: ["discount", "cash flow", "terminal", "present value", "intrinsic"]
+    ground_truth: 151.00
+    tolerance_pct: 30.0
+    minimum_tools: 5
+    required_tools: [finance_kb, query_filing_documents, get_market_fundamentals, web_search, search_wikipedia, calculator]
+    data_as_of: "2026-04-22"
+    
+  - id: q10
+    text: >
+      What were Amazon's operating margins for FY2022, FY2023, and FY2024, and did the
+      margin improve year-over-year in each period? Retrieve the three annual figures
+      from market financial data and verify FY2024 against the most recent 10-K filing.
+      Report the three margin percentages in order and answer yes or no for monotonic
+      improvement. 
+      Answer format: "AMZN: xx.x%, margin percentages [x.x, x.x, x.x], Monotonic improvement: yes/no"
+    grader: boolean_plus_numerics
+    ground_truth: 10.8
+    ground_truth_bool: true
+    ground_truth_values: [2.4, 6.4, 10.8]
+    tolerance_pct: 20.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_financials, query_filing_documents, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q11
+    text: >
+      What was Walmart's inventory turnover ratio for FY2024? Retrieve COGS from market
+      financial data and opening and closing inventory balances from Walmart's most
+      recent 10-K filing. Compute inventory turnover as COGS divided by average
+      inventory and report the ratio only. 
+      Answer format: "Walmart inventory turnover for FY2024: x.x"
+    grader: numeric
+    definition_keywords: ["inventory", "turnover", "working capital", "days", "efficient"]
+    ground_truth: 8.8
+    tolerance_pct: 15.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_financials, query_filing_documents, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q12
+    text: >
+      What was Netflix's Days Sales Outstanding (DSO) for FY2024? Retrieve annual
+      revenue from market financial data and accounts receivable from Netflix's most
+      recent 10-K filing. Compute DSO as (accounts receivable / revenue) × 365 and
+      report the number of days only. 
+      Answer format: "Netflix DSO for FY2024: x.x days"
+    grader: numeric
+    definition_keywords: ["days sales outstanding", "deferred", "receivable", "cash", "subscription"]
+    ground_truth: 14.5
+    tolerance_pct: 30.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_financials, query_filing_documents, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q13
+    text: >
+      What was JPMorgan Chase's Price-to-Book (P/B) ratio as of end-2024? Retrieve the
+      P/B ratio from market fundamentals and verify by computing market cap divided by
+      book value of common equity from the most recent 10-K filing. Report the P/B
+      ratio only. 
+      Answer format: "JPMorgan Chase P/B ratio as of end-2024: x.xx"
+    grader: numeric
+    definition_keywords: ["book value", "price", "equity", "bank", "tangible"]
+    ground_truth: 1.97
+    tolerance_pct: 15.0
+    minimum_tools: 5
+    required_tools: [ finance_kb, get_market_fundamentals, query_filing_documents, get_market_history, search_wikipedia, calculator, web_search] 
+    data_as_of: "2026-04-22"
+
+  - id: q14
+    text: >
+      What were Intel (INTC) and AMD's reported gross margins for FY2024? Retrieve both
+      figures from market financial data. Report both gross margin percentages and state
+      which company had the higher gross margin. 
+      Answer format: "INTC: xx.x%, AMD: xx.x%, AMD had the higher gross margin"
+    grader: category_plus_numeric
+    ground_truth_category: "AMD"
+    ground_truth_values: {"INTC": 32.7, "AMD": 49.0}
+    tolerance_pp: 5.0
+    minimum_tools: 5
+    required_tools: [finance_kb, get_market_financials, query_filing_documents, calculator, web_search]
+    data_as_of: "2026-04-22"
+
+  - id: q15
+    text: >
+      What percentage of Pfizer's total assets is goodwill, based on its most recent
+      10-K filing? Retrieve total goodwill and total assets from the 10-K and cross-
+      check total assets against market financial data. Compute goodwill as a percentage
+      of total assets and report the percentage only. 
+      Answer format: "Pfizer goodwill as percentage of total assets: xx.x%"
+    grader: numeric
+    definition_keywords: ["goodwill", "impairment", "intangible", "acquisition", "premium"]
+    ground_truth: 32.10
+    tolerance_pp: 5.0
+    minimum_tools: 5
+    required_tools: [finance_kb, query_filing_documents, get_market_fundamentals, get_market_financials, calculator, web_search]
+    data_as_of: "2026-04-22"

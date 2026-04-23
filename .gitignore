@@ -1,0 +1,35 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+
+.env
+data/chroma/
+memory/conversations.db
+eval/results/
+__pycache__/
+*.pyc
+.venv/
+full_implementation.md
+plan.md
+using_UV.md
+decisions.md
+eval_results.md
+eval_plan.md
+fin_agent.ipynb
+new_agent.md
+pp.md
+report.md
+ui.py
+run_tests.md
+main.py
+copies/
+eval/results/
+logs/
+roadmap.md
+memory/*

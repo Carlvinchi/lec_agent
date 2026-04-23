@@ -1,0 +1,565 @@
+{
+  "version": "1.0",
+  "description": "Curated financial concepts knowledge base for the Financial Research Agent. Each entry is written to be useful as a vector-retrieval chunk: a clear one-line definition, the formula where applicable, a short explanation, common interpretation rules, and typical gotchas.",
+  "last_updated": "2026-04-21",
+  "entries": [
+    {
+      "id": "ebitda",
+      "term": "EBITDA",
+      "full_name": "Earnings Before Interest, Taxes, Depreciation, and Amortization",
+      "category": "profitability",
+      "definition": "A measure of a company's operating profitability that excludes the effects of financing decisions (interest), tax jurisdictions (taxes), and non-cash accounting charges (depreciation and amortization).",
+      "formula": "EBITDA = Net Income + Interest + Taxes + Depreciation + Amortization",
+      "alternative_formula": "EBITDA = Operating Income (EBIT) + Depreciation + Amortization",
+      "units": "currency (same as revenue)",
+      "typical_range": "Varies widely by industry; often reported as EBITDA margin (EBITDA / Revenue), with 15-25% considered healthy for most industries",
+      "interpretation": "Higher is generally better. Used heavily in M&A valuation (EV/EBITDA multiples) because it normalizes across capital structures and tax regimes.",
+      "gotchas": [
+        "Not a GAAP or IFRS measure — companies can calculate it differently",
+        "Ignores capital expenditures, which can be substantial for capital-intensive businesses",
+        "Warren Buffett and Charlie Munger have publicly criticized over-reliance on EBITDA",
+        "'Adjusted EBITDA' can include numerous add-backs that make it less comparable across companies"
+      ],
+      "related_terms": ["free_cash_flow", "operating_margin", "ev_ebitda"]
+    },
+    {
+      "id": "free_cash_flow",
+      "term": "Free Cash Flow",
+      "full_name": "Free Cash Flow (FCF)",
+      "category": "cash_flow",
+      "definition": "The cash a company generates from operations after paying for capital expenditures needed to maintain or expand its asset base. Represents discretionary cash available to debt holders and equity holders.",
+      "formula": "FCF = Operating Cash Flow - Capital Expenditures",
+      "alternative_formula": "FCF = EBIT × (1 - tax rate) + Depreciation & Amortization - Change in Working Capital - Capital Expenditures",
+      "units": "currency (same as revenue)",
+      "typical_range": "Positive FCF is healthy; negative FCF during heavy-investment periods is common but watch for sustained negative FCF",
+      "interpretation": "Harder to manipulate than net income. Unlevered FCF (FCFF) is used for enterprise valuation in DCF; levered FCF (FCFE) measures cash available to equity holders after debt service.",
+      "gotchas": [
+        "Non-GAAP measure; definitions vary by company",
+        "Capex decisions (maintenance vs. growth) affect FCF but are often not separated",
+        "Can be temporarily inflated by delaying supplier payments or accelerating collections"
+      ],
+      "related_terms": ["ebitda", "capex", "working_capital", "dcf"]
+    },
+    {
+      "id": "gross_margin",
+      "term": "Gross Margin",
+      "full_name": "Gross Profit Margin",
+      "category": "profitability",
+      "definition": "The percentage of revenue remaining after subtracting the cost of goods sold (COGS). Measures how efficiently a company produces its products or delivers its services.",
+      "formula": "Gross Margin = (Revenue - COGS) / Revenue × 100%",
+      "units": "percentage",
+      "typical_range": "Software/SaaS: 70-90%; Retail: 20-40%; Grocery: 2-5%; Manufacturing: 25-40%",
+      "interpretation": "Higher is better. Compare within industry; gross margin is highly industry-dependent. Rising gross margins over time suggest pricing power or improving operational efficiency.",
+      "gotchas": [
+        "COGS definition varies — some companies include fulfillment/shipping, others don't",
+        "Not meaningful for companies where revenue isn't tied to a physical product (e.g., banks)"
+      ],
+      "related_terms": ["operating_margin", "net_margin"]
+    },
+    {
+      "id": "operating_margin",
+      "term": "Operating Margin",
+      "full_name": "Operating Profit Margin",
+      "category": "profitability",
+      "definition": "The percentage of revenue remaining after subtracting all operating expenses (COGS + SG&A + R&D). Measures profitability from core business operations before interest and taxes.",
+      "formula": "Operating Margin = Operating Income / Revenue × 100%",
+      "alternative_formula": "Operating Margin = (Revenue - COGS - Operating Expenses) / Revenue × 100%",
+      "units": "percentage",
+      "typical_range": "Varies by industry; 10-20% is healthy for most sectors, software often 20-40%+",
+      "interpretation": "Higher is better. Cleaner measure than net margin because it excludes financing decisions and one-time tax items. Often used to assess management efficiency.",
+      "gotchas": [
+        "Classification of expenses as operating vs. non-operating varies",
+        "Stock-based compensation treatment differs between GAAP and non-GAAP reporting"
+      ],
+      "related_terms": ["gross_margin", "net_margin", "ebitda"]
+    },
+    {
+      "id": "net_margin",
+      "term": "Net Margin",
+      "full_name": "Net Profit Margin",
+      "category": "profitability",
+      "definition": "The percentage of revenue that becomes net income after all expenses, interest, taxes, and other items. The bottom-line profitability ratio.",
+      "formula": "Net Margin = Net Income / Revenue × 100%",
+      "units": "percentage",
+      "typical_range": "5-20% typical across industries; tech often 15-30%+, retail often 2-5%",
+      "interpretation": "Higher is better. Affected by capital structure (interest expense), tax rate, and one-time items, so less useful for operational comparisons across companies.",
+      "gotchas": [
+        "Distorted by one-time gains/losses (asset sales, litigation settlements)",
+        "Tax rate differences across jurisdictions make cross-company comparisons noisy",
+        "Can be negative; some growth-stage companies report net losses despite healthy operations"
+      ],
+      "related_terms": ["gross_margin", "operating_margin"]
+    },
+    {
+      "id": "pe_ratio",
+      "term": "P/E Ratio",
+      "full_name": "Price-to-Earnings Ratio",
+      "category": "valuation",
+      "definition": "The ratio of a company's share price to its earnings per share. Indicates how much investors are willing to pay per dollar of earnings.",
+      "formula": "P/E Ratio = Share Price / Earnings Per Share (EPS)",
+      "alternative_formula": "P/E Ratio = Market Capitalization / Net Income",
+      "units": "multiple (dimensionless)",
+      "typical_range": "Historical S&P 500 average: ~15-20x; growth stocks often 30-50x+; value stocks often 10-15x",
+      "interpretation": "Higher P/E suggests investors expect higher future growth or the stock is overvalued. Two common variants: Trailing P/E (past 12 months' earnings) and Forward P/E (projected next 12 months).",
+      "gotchas": [
+        "Meaningless or negative when earnings are zero or negative",
+        "Not comparable across industries — high-growth sectors structurally carry higher P/Es",
+        "Can be distorted by one-time items; many analysts use adjusted EPS"
+      ],
+      "related_terms": ["ev_ebitda", "price_to_book"]
+    },
+    {
+      "id": "ev_ebitda",
+      "term": "EV/EBITDA",
+      "full_name": "Enterprise Value to EBITDA",
+      "category": "valuation",
+      "definition": "A valuation multiple comparing a company's total enterprise value (market cap plus debt minus cash) to its EBITDA. Preferred over P/E for cross-company comparison because it normalizes capital structure.",
+      "formula": "EV/EBITDA = Enterprise Value / EBITDA",
+      "alternative_formula": "EV = Market Cap + Total Debt - Cash & Equivalents",
+      "units": "multiple (dimensionless)",
+      "typical_range": "Healthy companies typically 8-15x; high-growth 15-30x+; distressed or cyclical lows can be 4-8x",
+      "interpretation": "Lower may indicate undervaluation, higher may indicate overvaluation or growth premium. Widely used in M&A because it's capital-structure-neutral.",
+      "gotchas": [
+        "Ignores capital expenditure needs, which can matter greatly for capex-heavy businesses",
+        "EBITDA calculation variances make multiples less comparable than they appear",
+        "Not meaningful for financial companies (banks, insurers) where EBITDA isn't standard"
+      ],
+      "related_terms": ["ebitda", "pe_ratio"]
+    },
+    {
+      "id": "debt_to_equity",
+      "term": "Debt-to-Equity",
+      "full_name": "Debt-to-Equity Ratio (D/E)",
+      "category": "leverage",
+      "definition": "The ratio of a company's total liabilities (or total debt) to its shareholders' equity. Measures financial leverage and the relative balance between creditor and shareholder financing.",
+      "formula": "D/E = Total Debt / Total Shareholders' Equity",
+      "alternative_formula": "D/E = Total Liabilities / Total Shareholders' Equity (broader definition)",
+      "units": "ratio (dimensionless)",
+      "typical_range": "Industry-dependent; <1.0 generally conservative, 1-2 moderate, >2 high leverage. Utilities and financials often >2 by design.",
+      "interpretation": "Higher means more leveraged and riskier in downturns but potentially higher equity returns in good times. Compare within industry.",
+      "gotchas": [
+        "Different definitions: some use only long-term debt, others total liabilities",
+        "Off-balance-sheet items (operating leases before IFRS 16) may understate true leverage",
+        "Negative equity makes the ratio meaningless; this can happen after large buybacks or sustained losses"
+      ],
+      "related_terms": ["interest_coverage", "current_ratio"]
+    },
+    {
+      "id": "current_ratio",
+      "term": "Current Ratio",
+      "full_name": "Current Ratio",
+      "category": "liquidity",
+      "definition": "A liquidity ratio measuring a company's ability to cover its short-term obligations (due within one year) with its short-term assets.",
+      "formula": "Current Ratio = Current Assets / Current Liabilities",
+      "units": "ratio (dimensionless)",
+      "typical_range": "1.5-3.0 generally healthy; <1.0 may indicate liquidity stress; >3.0 may suggest inefficient capital use",
+      "interpretation": "Higher is safer for meeting obligations but very high values may indicate excess cash or inventory not being deployed productively.",
+      "gotchas": [
+        "Includes inventory, which may not convert to cash quickly — quick ratio is more conservative",
+        "Snapshot at period end; intra-period liquidity can differ",
+        "Industry norms vary — retailers often run lower current ratios due to fast inventory turnover"
+      ],
+      "related_terms": ["quick_ratio", "working_capital"]
+    },
+    {
+      "id": "quick_ratio",
+      "term": "Quick Ratio",
+      "full_name": "Quick Ratio (Acid-Test Ratio)",
+      "category": "liquidity",
+      "definition": "A stricter liquidity ratio than the current ratio, excluding inventory because inventory may not be quickly convertible to cash.",
+      "formula": "Quick Ratio = (Current Assets - Inventory) / Current Liabilities",
+      "alternative_formula": "Quick Ratio = (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities",
+      "units": "ratio (dimensionless)",
+      "typical_range": "1.0+ typically considered healthy; <1.0 may indicate dependence on inventory sales to meet obligations",
+      "interpretation": "Higher is better. Used when inventory is hard to liquidate (e.g., specialized industrial goods, seasonal items).",
+      "gotchas": [
+        "Some versions also exclude prepaid expenses",
+        "Accounts receivable quality matters — uncollectible AR inflates the ratio misleadingly"
+      ],
+      "related_terms": ["current_ratio", "working_capital"]
+    },
+    {
+      "id": "cagr",
+      "term": "CAGR",
+      "full_name": "Compound Annual Growth Rate",
+      "category": "growth",
+      "definition": "The mean annual growth rate of a value over a specified period, assuming growth compounds each year. Useful for comparing growth rates across periods of different lengths.",
+      "formula": "CAGR = (Ending Value / Beginning Value)^(1 / Number of Years) - 1",
+      "units": "percentage (annualized)",
+      "typical_range": "Mature company revenue CAGR: 3-10%; growth-stage: 20-50%+; mature market index (S&P 500 long-term): ~7-10% nominal",
+      "interpretation": "Smooths out volatility to give a single annualized figure. Useful for comparing investments or business growth over different time windows.",
+      "gotchas": [
+        "Hides year-to-year volatility — a stock can have 15% CAGR with years of -40% and +80%",
+        "Very sensitive to start/end points; cherry-picking endpoints distorts the figure",
+        "Not meaningful if start or end value is negative or zero",
+        "Number of Years = end year - start year (not the count of years in the range)"
+      ],
+      "related_terms": ["revenue_run_rate"]
+    },
+    {
+      "id": "dcf",
+      "term": "DCF",
+      "full_name": "Discounted Cash Flow",
+      "category": "valuation",
+      "definition": "A valuation method that estimates the value of an investment based on its projected future cash flows, discounted back to their present value using the required rate of return (typically WACC).",
+      "formula": "DCF Value = Σ [CF_t / (1 + r)^t] for t = 1 to n, plus Terminal Value / (1 + r)^n",
+      "alternative_formula": "Terminal Value = CF_(n+1) / (r - g), where g is the terminal growth rate",
+      "units": "currency (present value)",
+      "typical_range": "Output compared to current market cap to judge over/undervaluation",
+      "interpretation": "Core intrinsic-value method. Produces a per-share value comparable to current price. Very sensitive to inputs — small changes in WACC or terminal growth produce large valuation swings.",
+      "gotchas": [
+        "Garbage in, garbage out — projections beyond 3-5 years are inherently speculative",
+        "Terminal value often accounts for 60-80% of total DCF value; small changes dramatically alter output",
+        "Requires stable, predictable cash flows — not suitable for early-stage or distressed companies",
+        "Always run sensitivity analysis across WACC and growth assumptions"
+      ],
+      "related_terms": ["wacc", "free_cash_flow", "beta"]
+    },
+    {
+      "id": "wacc",
+      "term": "WACC",
+      "full_name": "Weighted Average Cost of Capital",
+      "category": "valuation",
+      "definition": "The blended cost of a company's financing, weighted by the proportions of debt and equity in its capital structure. Used as the discount rate in DCF valuations of unlevered free cash flows.",
+      "formula": "WACC = (E/V × Re) + (D/V × Rd × (1 - Tc))",
+      "alternative_formula": "Where: E=market value of equity, D=market value of debt, V=E+D, Re=cost of equity (typically CAPM), Rd=cost of debt, Tc=corporate tax rate",
+      "units": "percentage",
+      "typical_range": "Typical range 7-12% for large-cap companies; higher for riskier/smaller firms (up to 15-20%)",
+      "interpretation": "Lower WACC means cheaper capital and higher valuations in DCF. Serves as the hurdle rate for new investments — projects returning less than WACC destroy value.",
+      "gotchas": [
+        "Cost of equity (Re) typically from CAPM: Re = Rf + β × (Rm - Rf)",
+        "Interest tax shield applied only to debt cost — (1 - Tc) factor",
+        "Use market values, not book values, for E and D weights",
+        "Targeted/future capital structure may differ from current — use what's expected to persist"
+      ],
+      "related_terms": ["dcf", "beta", "debt_to_equity"]
+    },
+    {
+      "id": "beta",
+      "term": "Beta",
+      "full_name": "Beta (β)",
+      "category": "risk",
+      "definition": "A measure of a stock's volatility relative to the overall market. Beta quantifies systematic (market) risk and is a key input to the Capital Asset Pricing Model (CAPM).",
+      "formula": "β = Covariance(Stock Return, Market Return) / Variance(Market Return)",
+      "units": "dimensionless coefficient",
+      "typical_range": "Market (S&P 500) β = 1.0 by definition; utilities and consumer staples often 0.3-0.8; tech often 1.2-2.0+; high-volatility stocks 2.0+",
+      "interpretation": "β = 1: moves with market. β > 1: more volatile than market. β < 1: less volatile. β < 0 (rare): moves opposite to market.",
+      "gotchas": [
+        "Historical β may not predict future β",
+        "Period of measurement matters (2-year weekly vs 5-year monthly give different values)",
+        "Levered β (standard) vs unlevered β (asset beta) differ — use the right one for your purpose",
+        "Doesn't capture idiosyncratic/company-specific risk"
+      ],
+      "related_terms": ["wacc", "dcf"]
+    },
+    {
+      "id": "roe",
+      "term": "Return on Equity",
+      "full_name": "Return on Equity (ROE)",
+      "category": "profitability",
+      "definition": "A profitability ratio measuring how much net income a company generates per dollar of shareholders' equity. Indicates management's efficiency in using equity capital.",
+      "formula": "ROE = Net Income / Average Shareholders' Equity × 100%",
+      "units": "percentage",
+      "typical_range": "10-15% generally solid; >20% often excellent but check leverage; <5% may be weak",
+      "interpretation": "Higher is better, but investigate whether high ROE comes from operational efficiency or from high leverage. DuPont analysis decomposes ROE into margin × asset turnover × equity multiplier.",
+      "gotchas": [
+        "Can be artificially inflated by large share buybacks that shrink equity",
+        "Negative equity (from buybacks or losses) makes ROE meaningless or misleading",
+        "Doesn't consider risk or capital structure — a highly leveraged firm with 25% ROE may be riskier than a debt-free firm with 15%"
+      ],
+      "related_terms": ["roa", "debt_to_equity"]
+    },
+    {
+      "id": "roa",
+      "term": "Return on Assets",
+      "full_name": "Return on Assets (ROA)",
+      "category": "profitability",
+      "definition": "A profitability ratio measuring how efficiently a company generates earnings from its total assets, regardless of how those assets are financed.",
+      "formula": "ROA = Net Income / Average Total Assets × 100%",
+      "units": "percentage",
+      "typical_range": "5-10% generally good across industries; banks and financials often 1-2% (due to high leverage); asset-light businesses can be 15%+",
+      "interpretation": "Higher is better. Unlike ROE, not distorted by capital structure, making it useful for comparing companies with different leverage.",
+      "gotchas": [
+        "Heavily affected by accounting choices on asset capitalization",
+        "Not directly comparable across industries — capital-intensive sectors structurally lower",
+        "Intangibles and goodwill on the balance sheet can depress ROA without reflecting operational efficiency"
+      ],
+      "related_terms": ["roe", "asset_turnover"]
+    },
+    {
+      "id": "deferred_revenue",
+      "term": "Deferred Revenue",
+      "full_name": "Deferred Revenue (Unearned Revenue)",
+      "category": "balance_sheet",
+      "definition": "A liability representing payment received from customers for goods or services not yet delivered. Common in subscription, SaaS, and prepaid-service businesses.",
+      "formula": "No formula — reported as a line item on the balance sheet under current (or long-term) liabilities",
+      "units": "currency",
+      "typical_range": "Significant for SaaS companies (often 20-50% of annual revenue); minimal for traditional retail",
+      "interpretation": "Growing deferred revenue often signals healthy forward bookings. When services are delivered over time, the liability is reduced and revenue is recognized on the income statement.",
+      "gotchas": [
+        "Despite the name, it's a liability, not revenue",
+        "Sometimes split into current (earned within 12 months) and long-term portions",
+        "Key metric for SaaS companies — watch quarter-over-quarter trends as a demand signal"
+      ],
+      "related_terms": ["accounts_receivable", "working_capital"]
+    },
+    {
+      "id": "accounts_receivable",
+      "term": "Accounts Receivable",
+      "full_name": "Accounts Receivable (AR)",
+      "category": "balance_sheet",
+      "definition": "Money owed to a company by its customers for goods or services already delivered but not yet paid for. Reported as a current asset on the balance sheet.",
+      "formula": "No formula — reported as a line item on the balance sheet under current assets",
+      "units": "currency",
+      "typical_range": "Typically 10-20% of annual revenue for B2B businesses with net-30 terms; lower for cash-sale businesses",
+      "interpretation": "Growing AR without corresponding revenue growth may signal collection problems or customers in distress. Track alongside Days Sales Outstanding (DSO).",
+      "gotchas": [
+        "Reported net of allowance for doubtful accounts (estimated bad debt)",
+        "Factoring (selling AR) can make AR look lower than underlying sales activity suggests",
+        "Accelerating collections at period-end can temporarily lower AR without reflecting underlying trends"
+      ],
+      "related_terms": ["deferred_revenue", "days_sales_outstanding", "working_capital"]
+    },
+    {
+      "id": "goodwill",
+      "term": "Goodwill",
+      "full_name": "Goodwill",
+      "category": "balance_sheet",
+      "definition": "An intangible asset on the balance sheet representing the premium paid in an acquisition above the fair value of the target's identifiable net assets. Captures brand value, customer relationships, synergies, and other intangibles.",
+      "formula": "Goodwill = Purchase Price - Fair Value of Identifiable Net Assets Acquired",
+      "units": "currency",
+      "typical_range": "Varies greatly; can be 0 for organically grown companies, can exceed 50% of total assets for acquisition-heavy businesses",
+      "interpretation": "Not amortized under current GAAP/IFRS but tested for impairment at least annually. Goodwill impairment charges signal that prior acquisitions have underperformed expectations.",
+      "gotchas": [
+        "High goodwill relative to equity is a red flag — impairment could wipe out significant book value",
+        "Doesn't appear on the balance sheet unless generated through acquisition (internally generated brand value is not capitalized)",
+        "Impairment is non-cash but affects reported earnings and equity"
+      ],
+      "related_terms": ["amortisation", "depreciation"]
+    },
+    {
+      "id": "working_capital",
+      "term": "Working Capital",
+      "full_name": "Working Capital (Net Working Capital)",
+      "category": "liquidity",
+      "definition": "The difference between a company's current assets and current liabilities. Measures short-term operational liquidity and efficiency.",
+      "formula": "Working Capital = Current Assets - Current Liabilities",
+      "alternative_formula": "Operating Working Capital = (AR + Inventory) - (AP + Accrued Liabilities) — excludes cash and debt",
+      "units": "currency",
+      "typical_range": "Positive is typical and healthy; some efficient retailers (e.g., Amazon, Walmart) famously operate with negative working capital due to fast inventory turnover and slow supplier payments",
+      "interpretation": "Positive working capital indicates ability to fund day-to-day operations. Rising working capital consumes cash; falling working capital is a source of cash in the cash flow statement.",
+      "gotchas": [
+        "'Change in working capital' on the cash flow statement reflects how working capital shifts consumed or generated cash",
+        "Excess working capital can indicate inefficient capital deployment",
+        "Negative working capital isn't automatically bad — it depends on the business model"
+      ],
+      "related_terms": ["current_ratio", "quick_ratio", "accounts_receivable"]
+    },
+    {
+      "id": "capex",
+      "term": "Capex",
+      "full_name": "Capital Expenditures (CapEx)",
+      "category": "cash_flow",
+      "definition": "Funds used by a company to acquire, upgrade, or maintain long-term physical or intangible assets such as property, plant, equipment, or software. Distinct from operating expenses, which are fully deducted in the year incurred.",
+      "formula": "Capex (approx.) = Ending PP&E - Beginning PP&E + Depreciation",
+      "alternative_formula": "Reported directly on the cash flow statement under 'investing activities'",
+      "units": "currency",
+      "typical_range": "Capex-to-revenue ratio: asset-light businesses 1-5%; capital-intensive (utilities, telecom, manufacturing) 10-25%+",
+      "interpretation": "Distinguish maintenance capex (keeps operations running) from growth capex (expands capacity). Sustained growth capex above depreciation signals expansion; sustained capex below depreciation may signal underinvestment or harvest mode.",
+      "gotchas": [
+        "Not all capex is disclosed clearly by category — maintenance vs growth split often estimated",
+        "Capitalized software development costs are capex under GAAP but reported differently by company",
+        "Leases under IFRS 16 and ASC 842 changed balance sheet presentation, affecting capex interpretation"
+      ],
+      "related_terms": ["free_cash_flow", "depreciation"]
+    },
+    {
+      "id": "depreciation",
+      "term": "Depreciation",
+      "full_name": "Depreciation",
+      "category": "accounting",
+      "definition": "A non-cash accounting charge that allocates the cost of a tangible fixed asset over its useful life. Reflects the decline in asset value due to use, wear, or obsolescence.",
+      "formula": "Straight-line: Depreciation = (Asset Cost - Salvage Value) / Useful Life",
+      "alternative_formula": "Other methods: Declining balance, Units of production, Sum-of-years-digits",
+      "units": "currency (per period)",
+      "typical_range": "Depends on asset base; depreciation-to-revenue ratio typically 2-10% for most businesses, higher in capital-intensive industries",
+      "interpretation": "A non-cash expense added back in cash flow from operations. Affects reported net income but not cash. Higher depreciation reduces taxable income, creating a 'tax shield.'",
+      "gotchas": [
+        "Useful life and salvage value estimates are judgment calls; companies can differ",
+        "Accelerated depreciation methods (e.g., MACRS for US tax) produce different income patterns than straight-line",
+        "Only applies to tangible assets; intangibles are amortized"
+      ],
+      "related_terms": ["amortisation", "capex", "ebitda"]
+    },
+    {
+      "id": "amortisation",
+      "term": "Amortisation",
+      "full_name": "Amortisation (Amortization)",
+      "category": "accounting",
+      "definition": "A non-cash accounting charge that allocates the cost of an intangible asset (e.g., patents, software, licenses, trademarks with finite life) over its useful life.",
+      "formula": "Straight-line: Amortisation = (Intangible Asset Cost - Residual Value) / Useful Life",
+      "units": "currency (per period)",
+      "typical_range": "Heavily depends on acquisition history and intangible asset base",
+      "interpretation": "Functionally similar to depreciation but applied to intangibles. Added back in cash flow from operations. Goodwill is NOT amortized under current GAAP/IFRS (subject to impairment testing instead).",
+      "gotchas": [
+        "UK/international spelling is 'amortisation'; US spelling is 'amortization'",
+        "Can also refer to loan amortization (repaying principal over time) — different concept",
+        "Amortization of acquired intangibles is often excluded from 'adjusted' or 'non-GAAP' earnings"
+      ],
+      "related_terms": ["depreciation", "goodwill", "ebitda"]
+    },
+    {
+      "id": "revenue_run_rate",
+      "term": "Revenue Run Rate",
+      "full_name": "Revenue Run Rate",
+      "category": "growth",
+      "definition": "An extrapolation of current revenue (typically the most recent month or quarter) to project annualized revenue, assuming current performance continues.",
+      "formula": "Annual Run Rate = Monthly Revenue × 12",
+      "alternative_formula": "Quarterly Run Rate: Annual Run Rate = Quarterly Revenue × 4; ARR (SaaS) = MRR × 12",
+      "units": "currency (annualized)",
+      "typical_range": "Not a range — a projection method",
+      "interpretation": "Useful for high-growth companies where historical annual revenue understates current capacity. Commonly used in SaaS as Annual Recurring Revenue (ARR).",
+      "gotchas": [
+        "Assumes no seasonality — misleading for seasonal businesses (retail, tourism, tax prep)",
+        "Assumes stability — misleading during rapid growth or decline phases",
+        "Public companies prefer GAAP revenue; run rate is more common in private and startup contexts",
+        "ARR is specifically for recurring revenue — don't include one-time fees"
+      ],
+      "related_terms": ["cagr", "burn_rate"]
+    },
+    {
+      "id": "burn_rate",
+      "term": "Burn Rate",
+      "full_name": "Burn Rate",
+      "category": "cash_flow",
+      "definition": "The rate at which a company is spending its cash reserves, typically expressed per month. Critical metric for startups and pre-profitability companies to assess cash runway.",
+      "formula": "Gross Burn = Total Monthly Cash Expenses",
+      "alternative_formula": "Net Burn = Monthly Cash Expenses - Monthly Cash Revenue; Runway = Cash on Hand / Net Burn (in months)",
+      "units": "currency per month",
+      "typical_range": "Varies by stage and sector; early-stage startups often $50k-$500k/month; later stage can be $5M-$50M+/month",
+      "interpretation": "Net burn is more important than gross for measuring cash depletion. Runway of <6 months signals urgency to raise capital or cut costs; 18+ months is comfortable.",
+      "gotchas": [
+        "Gross vs net burn confusion — always clarify which is being reported",
+        "One-time expenses (e.g., annual software renewals) can distort a single month's burn",
+        "Doesn't capture non-cash costs, so doesn't directly correspond to P&L losses"
+      ],
+      "related_terms": ["free_cash_flow", "revenue_run_rate"]
+    },
+    {
+      "id": "days_sales_outstanding",
+      "term": "Days Sales Outstanding",
+      "full_name": "Days Sales Outstanding (DSO)",
+      "category": "efficiency",
+      "definition": "The average number of days it takes a company to collect payment after making a credit sale. A measure of working-capital efficiency and credit management.",
+      "formula": "DSO = (Accounts Receivable / Revenue) × Days in Period",
+      "alternative_formula": "DSO = (Average Accounts Receivable / Net Revenue) × 365 (for annual calculation)",
+      "units": "days",
+      "typical_range": "30-60 days typical for B2B; under 30 days for efficient operations; 60+ days may indicate collection issues. Industry-dependent: construction and healthcare often run 60-90+.",
+      "interpretation": "Lower is better — faster cash collection improves liquidity. Rising DSO can signal customer credit problems, sales-team concessions on terms, or deteriorating collections discipline.",
+      "gotchas": [
+        "Most public companies don't disclose credit sales separately — using total revenue introduces noise if cash sales are significant",
+        "Seasonal businesses will show DSO swings that aren't meaningful",
+        "Use average AR (beginning + ending / 2) rather than ending AR for more accurate annual calculation"
+      ],
+      "related_terms": ["accounts_receivable", "inventory_turnover", "working_capital"]
+    },
+    {
+      "id": "inventory_turnover",
+      "term": "Inventory Turnover",
+      "full_name": "Inventory Turnover Ratio",
+      "category": "efficiency",
+      "definition": "The number of times a company sells and replaces its inventory during a period. Measures how efficiently inventory is managed and converted to sales.",
+      "formula": "Inventory Turnover = COGS / Average Inventory",
+      "alternative_formula": "Days Inventory Outstanding (DIO) = 365 / Inventory Turnover",
+      "units": "times per period (or days, for DIO)",
+      "typical_range": "Grocery/fast fashion: 10-20x+/year; general retail: 5-10x; slow-moving industrial: 2-4x. Varies dramatically by industry.",
+      "interpretation": "Higher is generally better — indicates efficient inventory management and strong demand. Extremely high turnover may indicate stock-outs and lost sales; very low turnover suggests obsolete or slow-moving inventory.",
+      "gotchas": [
+        "Using sales (revenue) instead of COGS in the numerator is incorrect but common — inflates the ratio",
+        "Compare only within industry — a grocer and a jeweler have radically different structural turnovers",
+        "LIFO vs FIFO inventory accounting affects the ratio"
+      ],
+      "related_terms": ["days_sales_outstanding", "working_capital", "asset_turnover"]
+    },
+    {
+      "id": "asset_turnover",
+      "term": "Asset Turnover",
+      "full_name": "Asset Turnover Ratio",
+      "category": "efficiency",
+      "definition": "Revenue generated per dollar of assets. Measures how efficiently a company uses its assets to generate sales.",
+      "formula": "Asset Turnover = Revenue / Average Total Assets",
+      "units": "ratio (or 'times')",
+      "typical_range": "Retail: 1.5-3.0; manufacturing: 0.5-1.5; utilities: 0.2-0.5; software/asset-light: 0.5-1.0+",
+      "interpretation": "Higher means more revenue per dollar of assets — more efficient asset utilization. A key component of DuPont ROE decomposition: ROE = Net Margin × Asset Turnover × Equity Multiplier.",
+      "gotchas": [
+        "Industry-dependent — capital-intensive businesses structurally have low turnover",
+        "Large acquisitions can temporarily depress the ratio by inflating the asset base faster than revenue",
+        "Intangible-heavy balance sheets (goodwill, patents) can distort comparisons"
+      ],
+      "related_terms": ["roa", "inventory_turnover"]
+    },
+    {
+      "id": "interest_coverage",
+      "term": "Interest Coverage",
+      "full_name": "Interest Coverage Ratio (Times Interest Earned)",
+      "category": "leverage",
+      "definition": "A measure of a company's ability to service its debt, calculated as operating earnings divided by interest expense. Indicates how many times over the company can pay its interest obligations from current earnings.",
+      "formula": "Interest Coverage = EBIT / Interest Expense",
+      "alternative_formula": "EBITDA Coverage = EBITDA / Interest Expense (more lenient variant)",
+      "units": "ratio (times)",
+      "typical_range": ">3x generally healthy; 1.5-3x adequate but watchful; <1.5x concerning; <1x means earnings don't cover interest (distressed)",
+      "interpretation": "Higher is safer. Credit rating agencies use variants of this ratio heavily. Declining coverage over time is a warning sign.",
+      "gotchas": [
+        "EBIT and EBITDA variants produce different numbers — specify which",
+        "Negative EBIT makes the ratio meaningless",
+        "Doesn't account for principal repayments or capital expenditure needs — DSCR (debt-service coverage ratio) is broader",
+        "Interest rate environment matters — rising rates can rapidly erode coverage on floating-rate debt"
+      ],
+      "related_terms": ["debt_to_equity", "ebitda"]
+    },
+    {
+      "id": "price_to_book",
+      "term": "Price-to-Book",
+      "full_name": "Price-to-Book Ratio (P/B)",
+      "category": "valuation",
+      "definition": "The ratio of a company's market capitalization to its book value of equity. Indicates how much investors are paying per dollar of net assets.",
+      "formula": "P/B = Market Capitalization / Book Value of Equity",
+      "alternative_formula": "P/B per share = Share Price / Book Value per Share",
+      "units": "multiple (dimensionless)",
+      "typical_range": "Banks and financials typically 0.8-2.0; industrial/manufacturing 1-3; software/tech often 5-20+; <1.0 may indicate distressed or deep value",
+      "interpretation": "Traditional value metric. P/B < 1 historically considered value territory but can signal real problems (impairment, declining business). Less useful for asset-light businesses where book value understates economic value.",
+      "gotchas": [
+        "Largely meaningless for software/services companies — most value is in intangibles not on the balance sheet",
+        "Share buybacks reduce book equity, raising P/B mechanically",
+        "Goodwill on the balance sheet can distort P/B — some analysts use tangible book value instead",
+        "International comparisons complicated by accounting differences (IFRS vs GAAP)"
+      ],
+      "related_terms": ["pe_ratio", "ev_ebitda", "roe"]
+    }
+  ],
+  "metadata": {
+    "total_entries": 30,
+    "categories": [
+      "profitability",
+      "valuation",
+      "liquidity",
+      "leverage",
+      "growth",
+      "risk",
+      "balance_sheet",
+      "cash_flow",
+      "accounting",
+      "efficiency"
+    ],
+    "intended_use": "Seed data for ChromaDB vector store used by the finance_kb tool in the Financial Research Agent. Each entry's 'definition', 'formula', 'interpretation', and 'gotchas' fields should be embedded for retrieval.",
+    "sources_consulted": [
+      "Investopedia",
+      "Corporate Finance Institute (corporatefinanceinstitute.com)",
+      "Wall Street Prep",
+      "Wikipedia (for general background)",
+      "Macabacus",
+      "Salesforce finance glossary"
+    ],
+    "embedding_recommendation": "Concatenate term + full_name + definition + formula + interpretation as the text to embed. Store the full entry as metadata for retrieval."
+  }
+}
