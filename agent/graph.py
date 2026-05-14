@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json
 from langchain_anthropic import ChatAnthropic
+from langchain_core.messages import ToolMessage
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import StructuredTool
 from langgraph.graph import StateGraph, END
@@ -37,6 +38,8 @@ async def build_mcp_registry(mcp_client) -> list:
     """Return a list of LangChain tools from a MultiServerMCPClient (v0.1.0+)."""
     return await mcp_client.get_tools()
 
+def _all_tool_messages(messages: list) -> list[ToolMessage]:
+    return [m for m in messages if isinstance(m, ToolMessage)]
 
 def _wrap_with_dedup(
     tools: list, dedup_cache: dict, tracker
@@ -130,9 +133,32 @@ def build_graph(
     
     #This node is for simple queries where we want to skip planning, tool calls, and reflection, and go straight to a final answer after the first LLM response.
     def _simple_response_node(state: AgentState) -> dict:
+        tool_msgs = _all_tool_messages(state["messages"])
+
+         # Append new ToolMessages to full_tool_log, deduplicating by tool_call_id.
+        logged_ids = {
+            entry.get("tool_call_id")
+            for entry in state["full_tool_log"]
+            if isinstance(entry, dict)
+        }
+        new_log_entries = [
+            {
+                "tool_call_id": msg.tool_call_id,
+                "tool": msg.name,
+                "content": str(msg.content)[:500],
+            }
+            for msg in tool_msgs
+            if msg.tool_call_id not in logged_ids
+        ]
         return {
         "is_complete": True,  
         "final_answer": state["messages"][-1].content if state["messages"] else "Request terminated due to budget constraints.",
+        "session_summary": state["messages"][-1].content if state["messages"] else "No summary available.",
+        "observation_log": state["observation_log"] + [
+            {"tool": msg.name, "result": str(msg.content)[:500]}
+            for msg in tool_msgs
+        ],
+        "full_tool_log": state["full_tool_log"] + new_log_entries,
         "conversation_turns": state["conversation_turns"] + 1, 
         "tokens_used": tracker.snapshot()["tokens_used"],
         "dollars_spent": tracker.snapshot()['dollars_spent']

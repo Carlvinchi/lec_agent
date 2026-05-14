@@ -34,6 +34,50 @@ def _all_tool_messages(messages: list) -> list[ToolMessage]:
     return [m for m in messages if isinstance(m, ToolMessage)]
 
 
+def _normalize_python_literals(text: str) -> str:
+    """Replace Python-style True/False/None with JSON equivalents."""
+    import re
+    text = re.sub(r'\bTrue\b', 'true', text)
+    text = re.sub(r'\bFalse\b', 'false', text)
+    text = re.sub(r'\bNone\b', 'null', text)
+    return text
+
+
+def _extract_json_object(text: str) -> dict:
+    if not isinstance(text, str):
+        return {}
+    text = text.strip()
+
+    # Remove markdown fences if the model wrapped the JSON in code blocks.
+    if text.startswith("```") and text.rstrip().endswith("```"):
+        text = text.split("\n", 1)[1].rsplit("\n", 1)[0]
+
+    text = _normalize_python_literals(text)
+
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    # Find the first balanced JSON object in the text.
+    start = text.find("{")
+    while start != -1:
+        depth = 0
+        for i, ch in enumerate(text[start:], start):
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    candidate = text[start : i + 1]
+                    try:
+                        return json.loads(candidate)
+                    except json.JSONDecodeError:
+                        break
+        start = text.find("{", start + 1)
+    return {}
+
+
 async def reflector_node(
     state: AgentState,
     llm_reflector,
@@ -50,7 +94,7 @@ async def reflector_node(
     obs_lines = []
     for msg in all_tool_msgs:
         tag = "[NEW]" if msg.tool_call_id in current_ids else "[PRIOR]"
-        obs_lines.append(f"{tag} [{msg.name or 'tool'}] {str(msg.content)[:250]}")
+        obs_lines.append(f"{tag} [{msg.name or 'tool'}] {str(msg.content)}")
     obs_summary = "\n".join(obs_lines)
 
     prompt = _loader.load("reflector", version=version).render(
@@ -69,10 +113,9 @@ async def reflector_node(
             completion_tokens=usage.get("output_tokens", 0),
         )
 
-    try:
-        parsed = json.loads(response.content)
-    except (json.JSONDecodeError, AttributeError):
-        parsed = {}
+    parsed = _extract_json_object(response.content)
+    print(f"Reflector raw response:\n{response.content}\n")
+    print(f"Reflector response:\nParsed:\n parsed={parsed}\n")
  
     is_complete = parsed.get("is_complete", False)
     gap = parsed.get("gap")
