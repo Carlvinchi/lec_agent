@@ -1,3 +1,20 @@
+# Suppress Python warnings
+import warnings
+warnings.filterwarnings("ignore")
+
+# Suppress HuggingFace/transformers and SentenceTransformers warnings
+try:
+    from transformers import logging as hf_logging
+    hf_logging.set_verbosity_error()
+except ImportError:
+    pass
+try:
+    import logging
+    logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.ERROR)
+except Exception:
+    pass
+
+
 from dotenv import load_dotenv
 load_dotenv()
 

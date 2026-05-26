@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import ToolMessage
+from langchain_core.messages import ToolMessage, AIMessage
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import StructuredTool
 from langgraph.graph import StateGraph, END
@@ -72,11 +72,11 @@ def _wrap_with_dedup(
 
 
 def route_after_planner(state: AgentState) -> str:
-    from langchain_core.messages import AIMessage
+    
     msgs = state["messages"]
     if msgs and isinstance(msgs[-1], AIMessage) and msgs[-1].tool_calls:
         return "human_review"
-    return "simple_response"
+    return "terminate"
 
 
 def build_graph(
@@ -131,72 +131,37 @@ def build_graph(
     def _budget_check(s):
         return budget_check_node(s, tracker)
     
-    #This node is for simple queries where we want to skip planning, tool calls, and reflection, and go straight to a final answer after the first LLM response.
-    def _simple_response_node(state: AgentState) -> dict:
-        tool_msgs = _all_tool_messages(state["messages"])
+    def _human_review(s):
+        return human_review_node(s)
+    
 
-         # Append new ToolMessages to full_tool_log, deduplicating by tool_call_id.
-        logged_ids = {
-            entry.get("tool_call_id")
-            for entry in state["full_tool_log"]
-            if isinstance(entry, dict)
-        }
-        new_log_entries = [
-            {
-                "tool_call_id": msg.tool_call_id,
-                "tool": msg.name,
-                "content": str(msg.content)[:500],
-            }
-            for msg in tool_msgs
-            if msg.tool_call_id not in logged_ids
-        ]
-        return {
-        "is_complete": True,  
-        "final_answer": state["messages"][-1].content if state["messages"] else "Request terminated due to budget constraints.",
-        "session_summary": state["messages"][-1].content if state["messages"] else "No summary available.",
-        "observation_log": state["observation_log"] + [
-            {"tool": msg.name, "result": str(msg.content)[:500]}
-            for msg in tool_msgs
-        ],
-        "full_tool_log": state["full_tool_log"] + new_log_entries,
-        "conversation_turns": state["conversation_turns"] + 1, 
-        "tokens_used": tracker.snapshot()["tokens_used"],
-        "dollars_spent": tracker.snapshot()['dollars_spent']
-        }
-        
-
+    #New Graph
     g = StateGraph(AgentState)
     g.add_node("planner",      _planner)
     g.add_node("budget_check", _budget_check)
-    g.add_node("tools",        tool_node)
-    g.add_node("reflector",    _reflector)
-    g.add_node("terminate",    _terminate)
-    g.add_node("simple_response", _simple_response_node)
-    g.add_node("human_review", human_review_node)
+    g.add_node("tools", tool_node)
+
+    g.add_node("terminate", _terminate)
+    g.add_node("human_review", _human_review)
 
     g.set_entry_point("planner")
     g.add_conditional_edges(
         "planner", route_after_planner,
-        ["human_review", "simple_response"]
+        ["human_review", "terminate"]
     )
-    
-    g.add_edge("simple_response", END)
+
+
     g.add_conditional_edges(
         "human_review", route_after_review,
         [ "budget_check",  "planner"],
     )
-   
+
     g.add_conditional_edges(
         "budget_check", route_after_budget,
         ["tools", "terminate"],
     )
-    g.add_edge("tools", "reflector")
-    
-    
-    g.add_conditional_edges(
-        "reflector", route_after_reflector,
-        ["planner", "terminate"]
-    )
+    g.add_edge("tools", "planner")
+
     g.add_edge("terminate", END)
 
     return g.compile(checkpointer=checkpointer)

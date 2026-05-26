@@ -33,7 +33,8 @@ def human_review_node(state: AgentState) -> dict:
                   re-plans on the next iteration.
     """
 
-    return {}
+    #return {}
+    
     msgs = state["messages"]
     last_ai: AIMessage = msgs[-1]
 
@@ -63,9 +64,6 @@ def human_review_node(state: AgentState) -> dict:
         "tool_calls": last_ai.tool_calls,
         "reasoning": reasoning_text,
     })
-
-    # Default to approve to allow evaluation to continue in tests
-    decision["action"] = "approve"
 
     action = decision.get("action", "approve")
 

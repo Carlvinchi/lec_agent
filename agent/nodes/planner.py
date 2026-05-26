@@ -1,11 +1,25 @@
 from __future__ import annotations
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage, ToolMessage, AIMessage
 from agent.state import AgentState
 from agent.prompt_loader import PromptLoader
 
 _loader = PromptLoader()
 
- 
+def _current_tool_messages(messages: list) -> list[ToolMessage]:
+    """Collect ToolMessages from the most recent tool-call batch only."""
+    results = []
+    for msg in reversed(messages):
+        if isinstance(msg, ToolMessage):
+            results.append(msg)
+        elif isinstance(msg, AIMessage) and msg.tool_calls:
+            break
+    return list(reversed(results))
+
+
+def _all_tool_messages(messages: list) -> list[ToolMessage]:
+    """Collect all ToolMessages across every iteration."""
+    return [m for m in messages if isinstance(m, ToolMessage)]
+
 async def planner_node(
     state: AgentState,
     llm_planner,
@@ -38,23 +52,41 @@ async def planner_node(
                 }]
             )
         )
+    
+    # Pass the full accumulated evidence so the reflector can assess completeness
+    # across all loop iterations, not just the most recent batch.
+    all_tool_msgs = _all_tool_messages(state["messages"])
+    current_tool_msgs = _current_tool_messages(state["messages"])
  
     # Always append the current remaining budget so the planner sees an
     # accurate figure every iteration, even though the system prompt is cached.
     budget_note = f"[Budget remaining: ${state['remaining_budget_dollars']:.4f}]"
 
-    if state["reflection_notes"]:
-        # Loop iteration: guide the model on the specific gap to fill.
-        latest_gap = state["reflection_notes"][-1]
+    # if state["reflection_notes"]:
+    #     # Loop iteration: guide the model on the specific gap to fill.
+    #     latest_gap = state["reflection_notes"][-1]
+    #     new_messages.append(
+    #         HumanMessage(
+    #             content=(
+    #                 f"{budget_note}\n"
+    #                 "The previous research iteration was incomplete. "
+    #                 f"Remarks: {latest_gap}\n\n"
+    #             )
+    #         )
+    #     )
+
+    if existing_messages:
+        new_iteration = state["iteration"] + 1
         new_messages.append(
             HumanMessage(
                 content=(
                     f"{budget_note}\n"
-                    "The previous research iteration was incomplete. "
-                    f"Remarks: {latest_gap}\n\n"
+                    f"Current query: {state['query']}\n\n"
+                    "Review the data gathered so far and if the information gathered is sufficient, generate a final answer. If not, identify specific gaps in the research and what to do next to fill those gaps.\n"
                 )
             )
         )
+
     else:
         # Fresh or resumed session — always inject the current query so the
         # conversation ends with a user message regardless of checkpoint state.
@@ -76,5 +108,5 @@ async def planner_node(
     )
 
     new_messages.append(response)
-    return {"messages": new_messages}
+    return {"messages": new_messages, "iteration": new_iteration if existing_messages else 0}
  

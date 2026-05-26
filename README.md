@@ -10,8 +10,8 @@ A multi-turn financial research agent built on LangGraph. It answers complex fin
 User query
     │
     ▼
-┌─────────────┐     no tool calls    ┌──────────────────┐
-│   Planner   │ ──────────────────▶  │  Simple Response  │──▶ END
+┌─────────────┐      Final response  ┌──────────────────┐
+│   Planner   │ ──────────────────▶  │  Terminate  │──▶ END
 │ (Claude)    │                      └──────────────────┘
 └─────────────┘
     │ tool calls planned
@@ -29,21 +29,14 @@ User query
 ┌───────────┐
 │   Tools   │  (ToolNode — parallel execution)
 └───────────┘
-    │
-    ▼
-┌───────────┐   is_complete / max_iter  ┌───────────┐
-│ Reflector │ ─────────────────────────▶│ Terminate │──▶ END
-│ (GPT-4o)  │                           └───────────┘
-└───────────┘
-    │ gap found
+    │ Reflection and answer generation or additional planning
     ▼
   Planner  (next iteration)
 ```
 
 **Models:**
-- Planner — `claude-sonnet-4-6` (Anthropic, with ephemeral prompt caching)
-- Reflector — `gpt-4o-mini` (OpenAI)
-- Synthesiser — `gpt-5-nano` (OpenAI)
+- Planner/Reflector — `claude-sonnet-4-6` (Anthropic, with ephemeral prompt caching)
+- Summerizer — `gpt-5-nano` (OpenAI)
 
 **Two reasoning strategies** (selectable at runtime):
 - `plan_then_execute` — builds a parallel evidence map, retrieves all sources in one batch, cross-validates before synthesising

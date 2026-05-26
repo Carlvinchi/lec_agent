@@ -18,13 +18,14 @@ async def terminate_node(
     tool_list_str: str = ""
 ) -> dict:
     tool_msgs = _all_tool_messages(state["messages"])
+    final_answer = state["messages"][-1].content
+    summary = final_answer
 
-    if tool_msgs or state["is_complete"]:
-        final_answer = await _synthesise_answer(state, tool_msgs, llm_terminate, version, tool_list_str, tracker)
-    else:
-        final_answer = f"Unable to complete query: {state['termination_reason']}."
+    if state["terminated"]:
+        final_answer = f"Request terminated due to: {state['termination_reason']}."
 
-    summary = await _summarise_turn(state, tool_msgs, llm_terminate, final_answer, version, tracker)
+    if tool_msgs:
+        summary = await _summarise_turn(state, tool_msgs, llm_terminate, final_answer, version, tracker)
 
     # Append new ToolMessages to full_tool_log, deduplicating by tool_call_id.
     logged_ids = {
@@ -50,10 +51,9 @@ async def terminate_node(
             for msg in tool_msgs
         ],
         "full_tool_log": state["full_tool_log"] + new_log_entries,
-        "conversation_turns": state["conversation_turns"] + 1, 
+        "conversation_turns": state["conversation_turns"], 
         "tokens_used": tracker.snapshot()["tokens_used"],
         "dollars_spent": tracker.snapshot()['dollars_spent']
-
     }
 
 
@@ -74,17 +74,9 @@ async def _synthesise_answer(
     prompt = _loader.load("reporter", version=version).render(
         prior_section=prior_section,
         query=query,
-        tool_list=tool_list_str,
         remaining_budget=f"${state['remaining_budget_dollars']:.4f}",
-    )
-    # prompt = (
-    #     f"{prior_section}"
-    #     "Based on the following NEW research findings, answer this query concisely "
-    #     "in plain text (not JSON, not markdown code blocks):\n\n"
-    #     f"Query: {state['query']}\n\nNew findings:\n{obs_text}\n\n"
-    #     "Provide a direct answer with specific numbers where possible, and avoid vague statements. If the query cannot be answered based on the findings, say so explicitly."
-        
-    # )
+    ) 
+   
     response = await llm.ainvoke([HumanMessage(content=prompt)])
     if tracker is not None:
         usage = response.usage_metadata or {}
@@ -111,7 +103,7 @@ async def _summarise_turn(
 
     prompt = _loader.load("summariser", version=version).render(
         query=state["query"],
-        final_answer=final_answer[:500],
+        final_answer=final_answer,
         tool_names_used=", ".join(tool_names),
         key_observations=key_obs,
     )

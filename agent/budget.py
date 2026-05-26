@@ -32,10 +32,10 @@ MODEL_PRICING: dict[str, dict[str, float]] = {
 }
 
 CAPS = {
-    "dollars":          0.50,
+    "dollars":          0.5,
     "wall_time_s":    300.0,   # per-query; reset_timer() called between queries in eval
-    "iterations":       8,
-    "tool_calls":     20,   # total across all queries in a run; 15/query × 12 queries + headroom
+    "iterations":       10,
+    "tool_calls":     30,   # total across all queries in a run; 15/query × 12 queries + headroom
     "tokens":      200_000,
     "conversation_turns": 20,
 }
@@ -130,12 +130,12 @@ class BudgetTracker:
         return self.dollars_spent >= self._budget_dollars
 
     def check_caps(self, iteration: int, conversation_turns: int) -> str | None:
-        if self.dollars_spent       >= CAPS["dollars"]:            return "budget_dollars"
-        if self.wall_time_s         >= CAPS["wall_time_s"]:        return "budget_wall_time"
-        if iteration                >= CAPS["iterations"]:         return "max_iterations"
-        if self.tool_call_count     >= CAPS["tool_calls"]:         return "max_tool_calls"
-        if self.tokens_used         >= CAPS["tokens"]:             return "max_tokens"
-        if conversation_turns       >= CAPS["conversation_turns"]: return "max_conversation_turns"
+        if self.dollars_spent       >= CAPS["dollars"]:            return "estimated cost budget has been exceeded"
+        if self.wall_time_s         >= CAPS["wall_time_s"]:        return "estimated wall time budget has been exceeded"
+        if iteration                >= CAPS["iterations"]:         return "estimated maximum iterations have been exceeded"
+        if self.tool_call_count     >= CAPS["tool_calls"]:         return "estimated maximum tool calls have been exceeded"
+        if self.tokens_used         >= CAPS["tokens"]:             return "estimated maximum tokens have been exceeded"
+        if conversation_turns       >= CAPS["conversation_turns"]: return "estimated maximum conversation turns have been exceeded"
         return None
 
     def snapshot(self) -> dict:
